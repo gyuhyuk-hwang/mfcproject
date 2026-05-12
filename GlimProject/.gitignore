@@ -1,0 +1,16 @@
+# 빌드 결과
+*.exe
+*.obj
+*.o
+
+# Visual Studio
+.vs/
+Debug/
+Release/
+*.user
+*.suo
+
+# 데이터
+*.csv
+*.dat
+*.zip

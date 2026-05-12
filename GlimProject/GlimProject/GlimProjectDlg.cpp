@@ -112,6 +112,20 @@ BOOL CGlimProjectDlg::OnInitDialog()
 	m_pPaintDlg->Create(IDD_PaintDlg, this);
 	m_pPaintDlg->ShowWindow(SW_SHOW);
 
+	int nRadius = 10;
+	int nEdge = 1000;
+	CString str;
+
+	//초기값 설정
+	str.Format(_T("%d"), nRadius);
+	SetDlgItemText(IDC_EDIT_RADIUS, str);
+	str.Format(_T("%d"), nEdge);
+	SetDlgItemText(IDC_EDIT_EDGE, str);
+
+	//입력 상한선 설정
+	((CEdit*)GetDlgItem(IDC_EDIT_RADIUS))->SetLimitText(2);
+	((CEdit*)GetDlgItem(IDC_EDIT_EDGE))->SetLimitText(4);
+
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -183,6 +197,7 @@ UINT RandomThread(LPVOID param)
 
 	int nWidth = 640;
 	int nHeight = 480;
+	srand((unsigned int)time(NULL));
 
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 3; j++) {
