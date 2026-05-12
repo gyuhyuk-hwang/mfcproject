@@ -14,6 +14,7 @@ public:
 
 	CPaintDlg* m_pPaintDlg;
 	int m_nStaticID[3] = { IDC_STATIC_P1, IDC_STATIC_P2, IDC_STATIC_P3 };
+	bool m_bStopThread = false;
 	
 	// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -42,4 +43,5 @@ public:
 	afx_msg void OnDestroy();
 	void UpdatePoint(int id, CString m_pt);
 	afx_msg void OnStnClickedStaticP1();
+
 };

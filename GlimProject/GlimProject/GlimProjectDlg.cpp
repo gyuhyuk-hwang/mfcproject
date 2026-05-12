@@ -108,6 +108,7 @@ BOOL CGlimProjectDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+
 	m_pPaintDlg = new CPaintDlg;
 	m_pPaintDlg->Create(IDD_PaintDlg, this);
 	m_pPaintDlg->ShowWindow(SW_SHOW);
@@ -188,18 +189,23 @@ void CGlimProjectDlg::OnBnClickedBtnReset()
 
 	m_pPaintDlg->m_count = DEFAULT;
 	m_pPaintDlg->InitImage();
+	m_bStopThread = true;
 }
 
 UINT RandomThread(LPVOID param)
 {
-
-	CPaintDlg* pPaintDlg = (CPaintDlg*) param;
+	//부모 객체로 자식 가져오기
+	CGlimProjectDlg* glimDlg = (CGlimProjectDlg *) param;
+	CPaintDlg* pPaintDlg = glimDlg->m_pPaintDlg;
 
 	int nWidth = 640;
 	int nHeight = 480;
 	srand((unsigned int)time(NULL));
 
 	for (int i = 0; i < 10; i++) {
+		if (glimDlg->m_bStopThread == true) {
+			break;
+		}
 		for (int j = 0; j < 3; j++) {
 			pPaintDlg->m_PointArray[j].x = rand() % nWidth;
 			pPaintDlg->m_PointArray[j].y = rand() % nHeight;
@@ -209,12 +215,15 @@ UINT RandomThread(LPVOID param)
 
 		Sleep(500);
 	}
+
+	glimDlg->m_bStopThread = false;
+
 	return 0;
 }
 
 void CGlimProjectDlg::OnBnClickedBtnRandom()
 {
-	AfxBeginThread(RandomThread , m_pPaintDlg);
+	AfxBeginThread(RandomThread , this);
 }
 
 void CGlimProjectDlg::OnDestroy()

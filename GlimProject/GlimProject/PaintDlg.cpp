@@ -166,6 +166,7 @@ void CPaintDlg::DrawCircle()
 
 	CString edge;
 	pDlg -> GetDlgItemText(IDC_EDIT_EDGE, edge);
+	const int edgeOffset = _ttoi(edge) * 0.001;
 
 	int nPitch = m_image.GetPitch();
 	fm = (unsigned char*)m_image.GetBits();
@@ -175,8 +176,8 @@ void CPaintDlg::DrawCircle()
 	int x = center.x;
 	int r = sqrt((x- m_PointArray[0].x)* (x - m_PointArray[0].x) + (y- m_PointArray[0].y)* (y - m_PointArray[0].y));
 
-	for (int j = y - r; j <= y + r; j++) {
-		for (int i = x - r; i <= x + r; i++) {
+	for (int j = y - r - edgeOffset; j <= y + r + edgeOffset; j++) {
+		for (int i = x - r- edgeOffset; i <= x + r + edgeOffset; i++) {
 			if (i < 0 || j < 0 || i >= WIDTH || j >= HEIGHT) {
 				continue;
 			}
@@ -184,9 +185,10 @@ void CPaintDlg::DrawCircle()
 			int dy = j - y;
 
 			int dist = dx * dx + dy * dy;
-			int area = r * r;
+			int areaOut = (r + edgeOffset) * (r + edgeOffset);
+			int areaIn = (r - edgeOffset) * (r - edgeOffset);
 
-			if (abs(dist-area) <= _ttoi(edge)) {
+			if (dist < areaOut && dist > areaIn) {
 				fm[j * nPitch + i] = 0;
 			}
 		}
